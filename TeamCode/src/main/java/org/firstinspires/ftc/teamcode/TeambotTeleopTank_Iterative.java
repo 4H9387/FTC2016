@@ -72,13 +72,8 @@ public class TeambotTeleopTank_Iterative extends OpMode{
         /* Initialize the hardware variables.
          * The init() method of the hardware class does all the work here
          */
-        try {
-            robot.init(hardwareMap);
-        }
-        catch(IllegalArgumentException ex)
-        {
-            telemetry.addData("Say", ex.getMessage());
-        }
+        robot.init(hardwareMap);
+
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Say", "Hello Driver");    //
     }
