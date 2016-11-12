@@ -130,8 +130,8 @@ public class TeambotTeleopTank_Iterative extends OpMode{
     private void RunWheels() {
         double left;
         double right;
-        left = gamepad1.left_stick_y;
-        right = gamepad1.right_stick_y;
+        left = -gamepad1.left_stick_y;
+        right = -gamepad1.right_stick_y;
         telemetry.addData("left", left);
         telemetry.addData("right", right);
         robot.leftMotor.setPower(left);
