@@ -87,12 +87,12 @@ public class TeambotAutoDriveByGyro_Linear extends LinearOpMode {
 
     // These constants define the desired driving/control characteristics
     // The can/should be tweaked to suite the specific robot drive train.
-    static final double     DRIVE_SPEED             = 0.2; // 0.7    // Nominal speed for better accuracy.
-    static final double     TURN_SPEED              = 0.1; // 0.5    // Nominal half speed for better accuracy.
+    static final double     DRIVE_SPEED             = 0.7; // 0.7    // Nominal speed for better accuracy.
+    static final double     TURN_SPEED              = 0.5; // 0.5    // Nominal half speed for better accuracy.
 
     static final double     HEADING_THRESHOLD       = 1 ;      // As tight as we can make it with an integer gyro
     static final double     P_TURN_COEFF            = 0.05; //0.1    // Larger is more responsive, but also less stable
-    static final double     P_DRIVE_COEFF           = 0.07;  //0.15   // Larger is more responsive, but also less stable
+    static final double     P_DRIVE_COEFF           = 0.05;  //0.15   // Larger is more responsive, but also less stable
 
     ColorSensor colorSensor;
 
@@ -142,12 +142,14 @@ public class TeambotAutoDriveByGyro_Linear extends LinearOpMode {
         gyroDrive(DRIVE_SPEED, 24.0, 0.0);    // Drive FWD 12 inches
         gyroTurn( TURN_SPEED, -90.0);         // Turn  CCW to -90 Degrees
 
-        gyroHold( TURN_SPEED, -90, 1);    // Hold -45 Deg heading for a 1/2 second
+        //gyroHold( TURN_SPEED, -90, 1);    // Hold -45 Deg heading for a 1/2 second
 //        gyroTurn( TURN_SPEED,  45.0);         // Turn  CW  to  45 Degrees
 //        gyroHold( TURN_SPEED,  45.0, 0.5);    // Hold  45 Deg heading for a 1/2 second
 //        gyroTurn( TURN_SPEED,   0.0);         // Turn  CW  to   0 Degrees
 //        gyroHold( TURN_SPEED,   0.0, 1.0);    // Hold  0 Deg heading for a 1 second
-//        gyroDrive(DRIVE_SPEED, 24.0, 0.0);    // Drive FWD 24 inches
+        gyroDrive(DRIVE_SPEED, 24.0, -90);    // Drive FWD 24 inches
+        gyroTurn( TURN_SPEED, 0.0);
+        gyroDrive(DRIVE_SPEED, 24.0, 0);    // Drive FWD 24 inches
 //        gyroHold( TURN_SPEED,   90.0, 0.5);    // Hold  0 Deg heading for a 1/2 second
 //        gyroHold( TURN_SPEED, 90, 0.5);
     }
@@ -226,6 +228,7 @@ public class TeambotAutoDriveByGyro_Linear extends LinearOpMode {
 
                 // Display drive status for the driver.
                 telemetry.addData("Err/St",  "%5.1f/%5.1f",  error, steer);
+                telemetry.addData("Heading", "%d", gyro.getIntegratedZValue());
                 telemetry.addData("Target",  "%7d:%7d",      newLeftTarget,  newRightTarget);
                 telemetry.addData("Actual",  "%7d:%7d",      robot.leftMotor.getCurrentPosition(),
                                                              robot.rightMotor.getCurrentPosition());
@@ -325,11 +328,12 @@ public class TeambotAutoDriveByGyro_Linear extends LinearOpMode {
         // Send desired speeds to motors.
         robot.leftMotor.setPower(leftSpeed);
         robot.rightMotor.setPower(rightSpeed);
-
         // Display it for the driver.
         telemetry.addData("Target", "%5.2f", angle);
+        telemetry.addData("Heading", "%d", gyro.getIntegratedZValue());
         telemetry.addData("Err/St", "%5.2f/%5.2f", error, steer);
         telemetry.addData("Speed.", "%5.2f:%5.2f", leftSpeed, rightSpeed);
+        telemetry.addData("Heading Mode", "%s", gyro.getHeadingMode().toString());
 
         return onTarget;
     }
