@@ -91,8 +91,8 @@ public class TeambotAutoDriveByGyro_Linear extends LinearOpMode {
     static final double     TURN_SPEED              = 0.5; // 0.5    // Nominal half speed for better accuracy.
 
     static final double     HEADING_THRESHOLD       = 1 ;      // As tight as we can make it with an integer gyro
-    static final double     P_TURN_COEFF            = 0.05; //0.1    // Larger is more responsive, but also less stable
-    static final double     P_DRIVE_COEFF           = 0.05;  //0.15   // Larger is more responsive, but also less stable
+    static final double     P_TURN_COEFF            = 0.04; //0.1    // Larger is more responsive, but also less stable
+    static final double     P_DRIVE_COEFF           = 0.04;  //0.15   // Larger is more responsive, but also less stable
 
     ColorSensor colorSensor;
 

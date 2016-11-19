@@ -26,9 +26,9 @@ public class HardwareTeambot
     public Servo leftArm = null;
     public Servo rightArm = null;
 
-    public final static double ARM_HOME = 0.2;
+    public final static double ARM_HOME = 0.20;
     public final static double ARM_MIN_RANGE  = 0.20;
-    public final static double ARM_MAX_RANGE  = 0.90;
+    public final static double ARM_MAX_RANGE  = 0.80;
 
     /* local OpMode members. */
     HardwareMap hwMap           =  null;
@@ -63,8 +63,8 @@ public class HardwareTeambot
         leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        leftArm.setPosition(ARM_HOME);
-        rightArm.setPosition(ARM_HOME);
+        leftArm.setPosition(ARM_MIN_RANGE);
+        rightArm.setPosition(ARM_MAX_RANGE);
     }
 
     /***

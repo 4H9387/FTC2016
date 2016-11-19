@@ -59,9 +59,12 @@ public class TeambotTeleopTank_Iterative extends OpMode{
     /* Declare OpMode members. */
     HardwareTeambot robot       = new HardwareTeambot(); // use the class created to define a Pushbot's hardware
                                                          // could also use HardwarePushbotMatrix class.
-    double leftArmPosition      = robot.ARM_HOME;
-    double rightArmPosisiton    = robot.ARM_HOME;
-    final double ARM_SPEED       = 0.01;
+    double leftArmPosition      = robot.ARM_MIN_RANGE;
+    double rightArmPosisiton    = robot.ARM_MAX_RANGE;
+    double leftPower            = 0;
+    double rightPower           = 0;
+    final double ARM_SPEED      = 0.02;
+    final double ACCELERATION   = 0.04;
 
 
     /*
@@ -105,17 +108,20 @@ public class TeambotTeleopTank_Iterative extends OpMode{
     }
 
     private void RunServos() {
-        // Use gamepad Y & A raise and lower the arm
-        if (gamepad1.a)
+        if (gamepad2.left_bumper)
             leftArmPosition += ARM_SPEED;
-        else if (gamepad1.y)
+        else
             leftArmPosition -= ARM_SPEED;
 
-        // Use gamepad X & B to open and close the claw
-        if (gamepad1.x)
-            rightArmPosisiton += ARM_SPEED;
-        else if (gamepad1.b)
+        if (gamepad2.right_bumper)
             rightArmPosisiton -= ARM_SPEED;
+        else
+            rightArmPosisiton += ARM_SPEED;
+
+//        if(gamepad2.y)
+//            rightArmPosisiton -= ARM_SPEED;
+//        else if (gamepad2.a)
+//            rightArmPosisiton += ARM_SPEED;
 
         leftArmPosition = Range.clip(leftArmPosition, robot.ARM_MIN_RANGE, robot.ARM_MAX_RANGE);
         rightArmPosisiton = Range.clip(rightArmPosisiton, robot.ARM_MIN_RANGE, robot.ARM_MAX_RANGE);
@@ -127,15 +133,44 @@ public class TeambotTeleopTank_Iterative extends OpMode{
         robot.rightArm.setPosition(rightArmPosisiton);
     }
 
+    private double Accelerate(double value, double target, double rate)
+    {
+        double newValue=value;
+        if(newValue < target)
+        {
+            if(target-newValue<rate)
+                newValue = target;
+            else
+                newValue += rate;
+        }
+        else
+        {
+            if(newValue-target < rate)
+                newValue = target;
+            else
+                newValue -= rate;
+        }
+
+        return Range.clip(newValue, -1.0, 1.0);
+    }
     private void RunWheels() {
-        double left;
-        double right;
-        left = -gamepad1.left_stick_y;
-        right = -gamepad1.right_stick_y;
-        telemetry.addData("left", left);
-        telemetry.addData("right", right);
-        robot.leftMotor.setPower(left);
-        robot.rightMotor.setPower(right);
+
+        double leftTarget = -gamepad1.left_stick_y;
+        double rightTarget = -gamepad1.right_stick_y;
+
+        if(gamepad1.left_bumper || gamepad1.right_bumper)
+        {
+            leftTarget *= 0.5;
+            rightTarget *= 0.5;
+        }
+
+        leftPower = Accelerate(leftPower,leftTarget, ACCELERATION);
+        rightPower = Accelerate(rightPower,rightTarget, ACCELERATION);
+
+        telemetry.addData("left", leftPower);
+        telemetry.addData("right", rightPower);
+        robot.leftMotor.setPower(leftPower);
+        robot.rightMotor.setPower(rightPower);
     }
 
     /*
