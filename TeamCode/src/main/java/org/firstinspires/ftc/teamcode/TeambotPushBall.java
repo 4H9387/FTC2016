@@ -104,23 +104,23 @@ public class TeambotPushBall extends LinearOpMode {
          * The init() method of the hardware class does most of the work here
          */
         robot.init(hardwareMap);
-        gyro = (ModernRoboticsI2cGyro)hardwareMap.gyroSensor.get("gyro");
+        //gyro = (ModernRoboticsI2cGyro)hardwareMap.gyroSensor.get("gyro");
 
         // Ensure the robot it stationary, then reset the encoders and calibrate the gyro.
         robot.leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         // Send telemetry message to alert driver that we are calibrating;
-        telemetry.addData(">", "Calibrating Gyro");    //
-        telemetry.update();
+        //telemetry.addData(">", "Calibrating Gyro");    //
+        //telemetry.update();
 
-        gyro.calibrate();
+        //gyro.calibrate();
 
         // make sure the gyro is calibrated before continuing
-        while (!isStopRequested() && gyro.isCalibrating())  {
-            sleep(50);
-            idle();
-        }
+//        while (!isStopRequested() && gyro.isCalibrating())  {
+//            sleep(50);
+//            idle();
+       // }
 
         telemetry.addData(">", "Robot Ready.");    //
         telemetry.update();
@@ -130,11 +130,11 @@ public class TeambotPushBall extends LinearOpMode {
 
         // Wait for the game to start (Display Gyro value), and reset gyro before we move..
         while (!isStarted()) {
-            telemetry.addData(">", "Robot Heading = %d", gyro.getIntegratedZValue());
-            telemetry.update();
+//            telemetry.addData(">", "Robot Heading = %d", gyro.getIntegratedZValue());
+//            telemetry.update();
             idle();
         }
-        gyro.resetZAxisIntegrator();
+//        gyro.resetZAxisIntegrator();
 
         // Step through each leg of the path,
         // Note: Reverse movement is obtained by setting a negative distance (not speed)
@@ -205,31 +205,31 @@ public class TeambotPushBall extends LinearOpMode {
                    (robot.leftMotor.isBusy() && robot.rightMotor.isBusy())) {
 
                 // adjust relative speed based on heading error.
-                error = getError(angle);
-                steer = getSteer(error, P_DRIVE_COEFF);
-
+                //error = getError(angle);
+          //      steer = getSteer(error, P_DRIVE_COEFF);
+    steer=0;
                 // if driving in reverse, the motor correction also needs to be reversed
-                if (distance < 0)
-                    steer *= -1.0;
+//                if (distance < 0)
+//                    steer *= -1.0;
 
-                leftSpeed = speed - steer;
-                rightSpeed = speed + steer;
+                leftSpeed = speed; // - steer;
+                rightSpeed = speed; // + steer;
 
                 // Normalize speeds if any one exceeds +/- 1.0;
-                max = Math.max(Math.abs(leftSpeed), Math.abs(rightSpeed));
-                if (max > 1.0)
-                {
-                    leftSpeed /= max;
-                    rightSpeed /= max;
-                }
+//                max = Math.max(Math.abs(leftSpeed), Math.abs(rightSpeed));
+//                if (max > 1.0)
+//                {
+//                    leftSpeed /= max;
+//                    rightSpeed /= max;
+//                }
 
                 robot.leftMotor.setPower(leftSpeed);
                 robot.rightMotor.setPower(rightSpeed);
 
                 // Display drive status for the driver.
-                telemetry.addData("Err/St",  "%5.1f/%5.1f",  error, steer);
-                telemetry.addData("Heading", "%d", gyro.getIntegratedZValue());
-                telemetry.addData("Target",  "%7d:%7d",      newLeftTarget,  newRightTarget);
+                //telemetry.addData("Err/St",  "%5.1f/%5.1f",  error, steer);
+                //telemetry.addData("Heading", "%d", gyro.getIntegratedZValue());
+                //telemetry.addData("Target",  "%7d:%7d",      newLeftTarget,  newRightTarget);
                 telemetry.addData("Actual",  "%7d:%7d",      robot.leftMotor.getCurrentPosition(),
                                                              robot.rightMotor.getCurrentPosition());
                 telemetry.addData("Speed",   "%5.2f:%5.2f",  leftSpeed, rightSpeed);
