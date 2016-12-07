@@ -31,10 +31,16 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.LightSensor;
+import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
+import com.qualcomm.robotcore.util.Range;
 
 /*
  * This is an example LinearOpMode that shows how to use
@@ -47,67 +53,42 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
 */
-@Disabled
-@Autonomous(name = "Sensor: MR Gyro", group = "Sensor")
-public class SensorMRGyro extends LinearOpMode {
+//@Disabled
+@Autonomous(name = "Line Follower", group = "Sensor")
+public class LineFollower extends LinearOpMode {
+
+  HardwareTeambot         robot   = new HardwareTeambot();   // Use a Pushbot's hardware
+  DcMotor leftMotor, rightMotor;
+  double leftPower, rightPower, correction;
+  final double PERFECT_COLOR_VALUE = 0.5;
+
 
   @Override
   public void runOpMode() {
+    double basePower=.5;
+    robot.init(hardwareMap);
+    OpticalDistanceSensor lightSensor = robot.lightSensor;
 
-    ModernRoboticsI2cGyro gyro;   // Hardware Device Object
-    int xVal, yVal, zVal = 0;     // Gyro rate Values
-    int heading = 0;              // Gyro integrated heading
-    int angleZ = 0;
-    boolean lastResetState = false;
-    boolean curResetState  = false;
-
-    // get a reference to a Modern Robotics GyroSensor object.
-    gyro = (ModernRoboticsI2cGyro)hardwareMap.gyroSensor.get("gyro");
-
-    // start calibrating the gyro.
-    telemetry.addData(">", "Gyro Calibrating. Do Not move!");
-    telemetry.update();
-    gyro.calibrate();
-
-    // make sure the gyro is calibrated.
-    while (!isStopRequested() && gyro.isCalibrating())  {
-      sleep(50);
-      idle();
-    }
-
-    telemetry.addData(">", "Gyro Calibrated.  Press Start.");
-    telemetry.update();
-
-    // wait for the start button to be pressed.
     waitForStart();
 
-    while (opModeIsActive())  {
+    while (opModeIsActive()) {
+      // Get a correction
+      correction = (PERFECT_COLOR_VALUE - lightSensor.getLightDetected());
 
-      // if the A and B buttons are pressed just now, reset Z heading.
-      curResetState = (gamepad1.a && gamepad1.b);
-      if(curResetState && !lastResetState)  {
-        gyro.resetZAxisIntegrator();
+      // Sets the powers so they are no less than .075 and apply to correction
+      if (correction <= 0) {
+        leftPower = basePower - correction;
+        rightPower = basePower;
+      } else {
+        leftPower = basePower;
+        rightPower = basePower + correction;
       }
-      lastResetState = curResetState;
 
-      // get the x, y, and z values (rate of change of angle).
-      xVal = gyro.rawX();
-      yVal = gyro.rawY();
-      zVal = gyro.rawZ();
-
-      // get the heading info.
-      // the Modern Robotics' gyro sensor keeps
-      // track of the current heading for the Z axis only.
-      heading = gyro.getHeading();
-      angleZ  = gyro.getIntegratedZValue();
-
-      telemetry.addData(">", "Press A & B to reset Heading.");
-      telemetry.addData("0", "Heading %03d", heading);
-      telemetry.addData("1", "Int. Ang. %03d", angleZ);
-      telemetry.addData("2", "X av. %03d", xVal);
-      telemetry.addData("3", "Y av. %03d", yVal);
-      telemetry.addData("4", "Z av. %03d", zVal);
-      telemetry.update();
+      Range.clip(leftPower,0,1);
+      Range.clip(rightPower,0,1);
+      // Sets the powers to the motors
+      robot.leftMotor.setPower(leftPower * .5);
+      robot.rightMotor.setPower(rightPower * .5);
     }
   }
 }

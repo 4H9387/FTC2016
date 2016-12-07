@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -25,6 +27,8 @@ public class HardwareTeambot
     public DcMotor  rightMotor  = null;
     public Servo leftArm = null;
     public Servo rightArm = null;
+    public OpticalDistanceSensor lightSensor = null;
+    public ColorSensor colorSensor = null;
 
     public final static double ARM_HOME = 0.20;
     public final static double ARM_MIN_RANGE  = 0.20;
@@ -50,13 +54,15 @@ public class HardwareTeambot
         leftArm = hwMap.servo.get("left_arm");
         rightArm = hwMap.servo.get("right_arm");
 
+        colorSensor = hwMap.colorSensor.get("sensor_color");
+        lightSensor = hwMap.opticalDistanceSensor.get("sensor_ods");
+
         leftMotor.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
         rightMotor.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
 
         // Set all motors to zero power
         leftMotor.setPower(0);
         rightMotor.setPower(0);
-
 
         // Set all motors to run without encoders.
         // May want to use RUN_USING_ENCODERS if encoders are installed.
@@ -65,6 +71,8 @@ public class HardwareTeambot
 
         leftArm.setPosition(ARM_MIN_RANGE);
         rightArm.setPosition(ARM_MAX_RANGE);
+
+        colorSensor.enableLed(false);
     }
 
     /***
