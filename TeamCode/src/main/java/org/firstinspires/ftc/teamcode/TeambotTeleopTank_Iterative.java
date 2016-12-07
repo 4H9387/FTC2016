@@ -116,12 +116,7 @@ public class TeambotTeleopTank_Iterative extends OpMode{
         if (gamepad2.right_bumper)
             rightArmPosisiton -= ARM_SPEED;
         else
-            rightArmPosisiton += ARM_SPEED;
-
-//        if(gamepad2.y)
-//            rightArmPosisiton -= ARM_SPEED;
-//        else if (gamepad2.a)
-//            rightArmPosisiton += ARM_SPEED;
+            rightArmPosisiton += ARM_SPEED
 
         leftArmPosition = Range.clip(leftArmPosition, robot.ARM_MIN_RANGE, robot.ARM_MAX_RANGE);
         rightArmPosisiton = Range.clip(rightArmPosisiton, robot.ARM_MIN_RANGE, robot.ARM_MAX_RANGE);
@@ -166,6 +161,11 @@ public class TeambotTeleopTank_Iterative extends OpMode{
 
         leftPower = Accelerate(leftPower,leftTarget, ACCELERATION);
         rightPower = Accelerate(rightPower,rightTarget, ACCELERATION);
+
+        if(robot.leftTouchSensor.isPressed())
+            leftPower=0;
+        if(robot.rightTouchSensor.isPressed())
+            rightPower=0;
 
         telemetry.addData("left", leftPower);
         telemetry.addData("right", rightPower);
