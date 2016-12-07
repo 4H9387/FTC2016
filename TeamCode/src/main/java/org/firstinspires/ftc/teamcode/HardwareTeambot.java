@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
@@ -25,10 +26,16 @@ public class HardwareTeambot
     /* Public OpMode members. */
     public DcMotor  leftMotor   = null;
     public DcMotor  rightMotor  = null;
+    public DcMotor lift1Motor = null;
+    public DcMotor  lift2Motor  = null;
+    public DcMotor  claw1Motor   = null;
+    public DcMotor  claw2Motor  = null;
     public Servo leftArm = null;
     public Servo rightArm = null;
     public OpticalDistanceSensor lightSensor = null;
     public ColorSensor colorSensor = null;
+    public TouchSensor leftTouchSensor = null;
+    public TouchSensor rightTouchSensor = null;
 
     public final static double ARM_HOME = 0.20;
     public final static double ARM_MIN_RANGE  = 0.20;
@@ -51,11 +58,18 @@ public class HardwareTeambot
         // Define and Initialize Motors
         leftMotor   = hwMap.dcMotor.get("left_drive");
         rightMotor  = hwMap.dcMotor.get("right_drive");
+        lift1Motor = hwMap.dcMotor.get("lift1");
+        lift2Motor  = hwMap.dcMotor.get("lift2");
+        claw1Motor   = hwMap.dcMotor.get("claw1");
+        claw2Motor  = hwMap.dcMotor.get("claw2");
+
         leftArm = hwMap.servo.get("left_arm");
         rightArm = hwMap.servo.get("right_arm");
 
         colorSensor = hwMap.colorSensor.get("sensor_color");
         lightSensor = hwMap.opticalDistanceSensor.get("sensor_ods");
+        leftTouchSensor = hwMap.touchSensor.get("sensor_left_touch");
+        rightTouchSensor = hwMap.touchSensor.get("sensor_right_touch");
 
         leftMotor.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
         rightMotor.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
@@ -63,6 +77,12 @@ public class HardwareTeambot
         // Set all motors to zero power
         leftMotor.setPower(0);
         rightMotor.setPower(0);
+
+        lift1Motor.setPower(0);
+        lift2Motor.setPower(0);
+
+        claw1Motor.setPower(0);
+        claw2Motor.setPower(0);
 
         // Set all motors to run without encoders.
         // May want to use RUN_USING_ENCODERS if encoders are installed.
