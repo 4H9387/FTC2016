@@ -70,8 +70,8 @@ public class HardwareTeambot
         leftArm = hwMap.servo.get("left_arm");
         rightArm = hwMap.servo.get("right_arm");
 
-        leftColorSensor = hwMap.colorSensor.get("sensor_color_left");
-        rightColorSensor = hwMap.colorSensor.get("sensor_color_right");
+        leftColorSensor = hwMap.colorSensor.get("left_color");
+        rightColorSensor = hwMap.colorSensor.get("right_color");
 
         lightSensor = hwMap.opticalDistanceSensor.get("sensor_ods");
 
@@ -117,8 +117,8 @@ public class HardwareTeambot
         rightArm.setPosition(ARM_MAX_RANGE);
 
 
-        leftColorSensor.enableLed(false);
-        rightColorSensor.enableLed(false);
+        leftColorSensor.enableLed(true);
+        rightColorSensor.enableLed(true);
         lightSensor.enableLed(true);
     }
 

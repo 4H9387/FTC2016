@@ -208,6 +208,8 @@ public class TeambotTeleopTank_Iterative extends OpMode{
      */
     @Override
     public void stop() {
+        robot.leftColorSensor.enableLed(false);
+        robot.rightColorSensor.enableLed(false);
     }
 
 }

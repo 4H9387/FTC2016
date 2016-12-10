@@ -32,9 +32,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 
@@ -55,9 +53,6 @@ public class SensorMROpticalDistance extends LinearOpMode {
 
   @Override
   public void runOpMode() {
-    boolean bLedOn = false;
-    colorSensor = hardwareMap.colorSensor.get("sensor_color");
-    colorSensor.enableLed(bLedOn);
     odsSensor = hardwareMap.opticalDistanceSensor.get("sensor_ods");
 
     // wait for the start button to be pressed.
