@@ -326,6 +326,40 @@ public abstract class TeambotLinearOpModeBase extends LinearOpMode {
 
     public int COLOR_LOW = 15;
     public int COLOR_HIGH = 100;
+
+    protected void PushBeaconButton(Color color) {
+        if(getLeftColor() == color)
+        {
+            robot.leftArm.setPosition(robot.ARM_MAX_RANGE);
+            while(robot.leftArm.getPosition() < robot.ARM_MAX_RANGE) {
+                sleep(50);
+            }
+
+            sleep(1000);
+
+            if(getRightColor() != color)
+            {
+                encoderDrive(TeambotBlueBeacon.DRIVE_SPEED/2, -1,-1);
+                encoderDrive(TeambotBlueBeacon.DRIVE_SPEED/2, 1.5, 1.5);
+            }
+        }
+        else if(getRightColor() == color)
+        {
+            robot.rightArm.setPosition(robot.ARM_MIN_RANGE);
+            while(robot.leftArm.getPosition() > robot.ARM_MIN_RANGE) {
+                sleep(50);
+            }
+
+            sleep(1000);
+
+            if(getLeftColor() != color)
+            {
+                encoderDrive(TeambotBlueBeacon.DRIVE_SPEED/2, -1,-1);
+                encoderDrive(TeambotBlueBeacon.DRIVE_SPEED/2, 1.5, 1.5);
+            }
+        }
+    }
+
     public enum Color
     {
         Red,
@@ -350,12 +384,12 @@ public abstract class TeambotLinearOpModeBase extends LinearOpMode {
         return Color.Unknown;
     }
 
-    public Color GetLeftColor()
+    public Color getLeftColor()
     {
         return GetSensorColor(robot.leftColorSensor);
     }
 
-    public Color GetRightColor()
+    public Color getRightColor()
     {
         return GetSensorColor(robot.rightColorSensor);
     }

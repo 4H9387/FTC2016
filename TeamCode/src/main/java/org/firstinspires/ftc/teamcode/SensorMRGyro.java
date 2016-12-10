@@ -34,7 +34,6 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 /*
  * This is an example LinearOpMode that shows how to use
@@ -47,7 +46,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
 */
-@Disabled
+//@Disabled
 @Autonomous(name = "Sensor: MR Gyro", group = "Sensor")
 public class SensorMRGyro extends LinearOpMode {
 
