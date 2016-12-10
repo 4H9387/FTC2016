@@ -36,7 +36,7 @@ public class HardwareTeambot
     public OpticalDistanceSensor lightSensor = null;
     public ColorSensor leftColorSensor = null;
     public ColorSensor rightColorSensor = null;
-    public ColorSensor colorSensor = null;
+
     public TouchSensor leftTouchSensor = null;
     public TouchSensor rightTouchSensor = null;
     ModernRoboticsI2cGyro gyro    = null;
@@ -73,9 +73,8 @@ public class HardwareTeambot
         leftColorSensor = hwMap.colorSensor.get("sensor_color_left");
         rightColorSensor = hwMap.colorSensor.get("sensor_color_right");
 
-        colorSensor = hwMap.colorSensor.get("sensor_color");
-        colorSensor = hwMap.colorSensor.get("sensor_color");
         lightSensor = hwMap.opticalDistanceSensor.get("sensor_ods");
+
         leftTouchSensor = hwMap.touchSensor.get("sensor_left_touch");
         rightTouchSensor = hwMap.touchSensor.get("sensor_right_touch");
 
@@ -118,7 +117,9 @@ public class HardwareTeambot
         rightArm.setPosition(ARM_MAX_RANGE);
 
 
-        colorSensor.enableLed(false);
+        leftColorSensor.enableLed(false);
+        rightColorSensor.enableLed(false);
+        lightSensor.enableLed(true);
     }
 
     /***

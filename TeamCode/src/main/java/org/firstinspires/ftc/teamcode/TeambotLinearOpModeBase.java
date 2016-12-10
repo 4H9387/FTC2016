@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
@@ -83,8 +84,17 @@ public abstract class TeambotLinearOpModeBase extends LinearOpMode {
 
             // keep looping while we are still active, and there is time left, and both motors are running.
             while (opModeIsActive() &&
-                    (robot.leftMotor.isBusy() && robot.rightMotor.isBusy())) {
+                    (robot.leftMotor.isBusy() || robot.rightMotor.isBusy())) {
 
+                // Stop motor if touch sensor is pushed.
+                if(robot.leftTouchSensor.isPressed())
+                {
+                    robot.leftMotor.setPower(0);
+                }
+                if(robot.rightTouchSensor.isPressed())
+                {
+                    robot.rightMotor.setPower(0);
+                }
                 // Display it for the driver.
                 telemetry.addData("Path1", "Running to %7d :%7d", newLeftTarget, newRightTarget);
                 telemetry.addData("Path2", "Running at %7d :%7d",
@@ -311,5 +321,105 @@ public abstract class TeambotLinearOpModeBase extends LinearOpMode {
      */
     double getSteer(double error, double PCoeff) {
         return Range.clip(error * PCoeff, -1, 1);
+    }
+
+
+    public int COLOR_LOW = 15;
+    public int COLOR_HIGH = 100;
+    public enum Color
+    {
+        Red,
+        Blue,
+        Green,
+        Unknown
+    }
+
+    private Color GetSensorColor(ColorSensor sensor)
+    {
+        int red = sensor.red();
+        int blue = sensor.blue();
+        int green = sensor.green();
+
+        if(red<COLOR_LOW && green<COLOR_LOW && blue>COLOR_HIGH)
+            return Color.Blue;
+        if(red<COLOR_LOW && green>COLOR_HIGH && blue<COLOR_LOW)
+            return Color.Green;
+        if(red>COLOR_HIGH && green<COLOR_LOW && blue<COLOR_LOW)
+            return Color.Red;
+
+        return Color.Unknown;
+    }
+
+    public Color GetLeftColor()
+    {
+        return GetSensorColor(robot.leftColorSensor);
+    }
+
+    public Color GetRightColor()
+    {
+        return GetSensorColor(robot.rightColorSensor);
+    }
+
+    static final double     WHITE_THRESHOLD = 0.2;
+    public boolean driveToLine(double speed, double maxDistance)
+    {
+        boolean lineFound=false;
+        int newLeftTarget;
+        int newRightTarget;
+
+        // Ensure that the opmode is still active
+        if (opModeIsActive())
+        {
+            // Determine new target position, and pass to motor controller
+            newLeftTarget = robot.leftMotor.getCurrentPosition() + (int) (maxDistance * COUNTS_PER_INCH);
+            newRightTarget = robot.rightMotor.getCurrentPosition() + (int) (maxDistance * COUNTS_PER_INCH);
+            robot.leftMotor.setTargetPosition(newLeftTarget);
+            robot.rightMotor.setTargetPosition(newRightTarget);
+
+            // Turn On RUN_TO_POSITION
+            robot.leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            // reset the timeout time and start motion.
+            runtime.reset();
+            robot.leftMotor.setPower(Math.abs(speed));
+            robot.rightMotor.setPower(Math.abs(speed));
+
+            // keep looping while we are still active, and there is time left, and both motors are running.
+            while (opModeIsActive() &&
+                    (robot.leftMotor.isBusy() || robot.rightMotor.isBusy())) {
+
+                // Stop motor if touch sensor is pushed.
+                if(robot.leftTouchSensor.isPressed())
+                {
+                    robot.leftMotor.setPower(0);
+                }
+                if(robot.rightTouchSensor.isPressed())
+                {
+                    robot.rightMotor.setPower(0);
+                }
+                if(robot.lightSensor.getLightDetected()>WHITE_THRESHOLD)
+                {
+                    robot.leftMotor.setPower(0);
+                    robot.rightMotor.setPower(0);
+                    lineFound = true;
+                }
+                // Display it for the driver.
+                telemetry.addData("Path1", "Running to %7d :%7d", newLeftTarget, newRightTarget);
+                telemetry.addData("Path2", "Running at %7d :%7d",
+                        robot.leftMotor.getCurrentPosition(),
+                        robot.rightMotor.getCurrentPosition());
+                telemetry.update();
+            }
+
+            // Stop all motion;
+            robot.leftMotor.setPower(0);
+            robot.rightMotor.setPower(0);
+
+            // Turn off RUN_TO_POSITION
+            robot.leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        }
+        return lineFound;
     }
 }
