@@ -64,7 +64,7 @@ public class TeambotTeleopTank_Iterative extends OpMode{
     double leftPower            = 0;
     double rightPower           = 0;
     final double ARM_SPEED      = 0.02;
-    final double ACCELERATION   = 0.04;
+    final double ACCELERATION   = 0.03;
 
 
     /*
@@ -149,7 +149,7 @@ public class TeambotTeleopTank_Iterative extends OpMode{
         return Range.clip(newValue, -1.0, 1.0);
     }
     private void RunWheels() {
-
+        double accel = ACCELERATION;
         double leftTarget = -gamepad1.left_stick_y;
         double rightTarget = -gamepad1.right_stick_y;
 
@@ -157,10 +157,11 @@ public class TeambotTeleopTank_Iterative extends OpMode{
         {
             leftTarget *= 0.5;
             rightTarget *= 0.5;
+            accel *= 0.5;
         }
 
-        leftPower = Accelerate(leftPower,leftTarget, ACCELERATION);
-        rightPower = Accelerate(rightPower,rightTarget, ACCELERATION);
+        leftPower = Accelerate(leftPower,leftTarget, accel);
+        rightPower = Accelerate(rightPower,rightTarget, accel);
 
         if(robot.leftTouchSensor.isPressed() && gamepad1.left_stick_y < 0)
             leftPower=0;

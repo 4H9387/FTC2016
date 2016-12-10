@@ -35,6 +35,7 @@ public abstract class TeambotLinearOpModeBase extends LinearOpMode {
     {
         robot.init(hardwareMap);
         CalibrateGyro();
+        waitForStart();
     }
 
     private void CalibrateGyro() {
