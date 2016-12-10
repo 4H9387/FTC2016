@@ -173,6 +173,35 @@ public class TeambotTeleopTank_Iterative extends OpMode{
         robot.rightMotor.setPower(rightPower);
     }
 
+
+    private void RunWheelsCar() {
+
+        double forwardPower = -gamepad1.left_stick_y;
+        double steerPower = gamepad1.right_stick_x;
+
+
+        if(gamepad1.left_bumper || gamepad1.right_bumper)
+        {
+            forwardPower *= 0.5;
+            steerPower *= 0.5;
+        }
+
+        leftPower = forwardPower + steerPower;
+        rightPower = forwardPower - steerPower;
+
+        leftPower = Range.clip(leftPower,-1.0,1.0);
+        rightPower = Range.clip(rightPower,-1.0,1.0);
+        if(robot.leftTouchSensor.isPressed() && gamepad1.left_stick_y < 0)
+            leftPower=0;
+        if(robot.rightTouchSensor.isPressed() && gamepad1.right_stick_y < 0)
+            rightPower=0;
+
+        telemetry.addData("left", leftPower);
+        telemetry.addData("right", rightPower);
+        robot.leftMotor.setPower(leftPower);
+        robot.rightMotor.setPower(rightPower);
+    }
+
     /*
      * Code to run ONCE after the driver hits STOP
      */
