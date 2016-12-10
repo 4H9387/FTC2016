@@ -162,9 +162,9 @@ public class TeambotTeleopTank_Iterative extends OpMode{
         leftPower = Accelerate(leftPower,leftTarget, ACCELERATION);
         rightPower = Accelerate(rightPower,rightTarget, ACCELERATION);
 
-        if(robot.leftTouchSensor.isPressed())
+        if(robot.leftTouchSensor.isPressed() && gamepad1.left_stick_y < 0)
             leftPower=0;
-        if(robot.rightTouchSensor.isPressed())
+        if(robot.rightTouchSensor.isPressed() && gamepad1.right_stick_y < 0)
             rightPower=0;
 
         telemetry.addData("left", leftPower);

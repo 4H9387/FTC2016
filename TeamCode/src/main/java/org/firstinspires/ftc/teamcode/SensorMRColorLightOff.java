@@ -55,7 +55,7 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 @Autonomous(name = "Sensor: MR Color-off", group = "Sensor")
-@Disabled
+//@Disabled
 public class SensorMRColorLightOff extends LinearOpMode {
 
     ColorSensor colorSensor;    // Hardware Device Object
