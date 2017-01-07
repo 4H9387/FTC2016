@@ -42,8 +42,8 @@ public class HardwareTeambot
     ModernRoboticsI2cGyro gyro    = null;
 
     public final static double ARM_HOME = 0.20;
-    public final static double ARM_MIN_RANGE  = 0.20;
-    public final static double ARM_MAX_RANGE  = 0.80;
+    public final static double ARM_MIN_RANGE  = 0.10;
+    public final static double ARM_MAX_RANGE  = 0.90;
 
     /* local OpMode members. */
     HardwareMap hwMap           =  null;

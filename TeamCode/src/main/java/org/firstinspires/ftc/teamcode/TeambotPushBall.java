@@ -11,7 +11,8 @@ public class TeambotPushBall extends TeambotLinearOpModeBase {
     public void runOpMode() {
 
         InitializeRobot();
-        encoderDrive(DRIVE_SPEED,52.0,52.0);
-
+        encoderDrive(DRIVE_SPEED,50.0,50.0);
+        gyroTurn(DRIVE_SPEED, 90);
+        encoderDrive(DRIVE_SPEED, 40,40);
     }
 }
