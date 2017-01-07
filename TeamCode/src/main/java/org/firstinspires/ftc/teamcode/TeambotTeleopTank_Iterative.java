@@ -148,6 +148,7 @@ public class TeambotTeleopTank_Iterative extends OpMode{
 
         return Range.clip(newValue, -1.0, 1.0);
     }
+
     private void RunWheels() {
         double accel = ACCELERATION;
         double leftTarget = -gamepad1.left_stick_y;
@@ -174,6 +175,11 @@ public class TeambotTeleopTank_Iterative extends OpMode{
         robot.rightMotor.setPower(rightPower);
     }
 
+    private void RunLift() {
+        double power = gamepad1.left_stick_y;
+
+        robot.lift1Motor.setPower(power);
+    }
 
     private void RunWheelsCar() {
 
