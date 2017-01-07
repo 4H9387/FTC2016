@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.hardware.I2cAddr;
 
 /**
  * This is NOT an opmode.
@@ -68,10 +69,13 @@ public class HardwareTeambot
 //        claw2Motor  = hwMap.dcMotor.get("claw2");
 
         leftArm = hwMap.servo.get("left_arm");
+
         rightArm = hwMap.servo.get("right_arm");
 
         leftColorSensor = hwMap.colorSensor.get("left_color");
+        leftColorSensor.setI2cAddress(I2cAddr.create7bit(0x1e)); //7-bit address for 0x3c (Standard address)
         rightColorSensor = hwMap.colorSensor.get("right_color");
+        rightColorSensor.setI2cAddress(I2cAddr.create7bit(0x26)); //7-bit address for 0x4c (New Address for 2nd color sensor)
 
         lightSensor = hwMap.opticalDistanceSensor.get("sensor_ods");
 
