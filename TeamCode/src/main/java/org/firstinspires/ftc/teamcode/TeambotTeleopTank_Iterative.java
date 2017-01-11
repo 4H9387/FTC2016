@@ -109,6 +109,12 @@ public class TeambotTeleopTank_Iterative extends OpMode{
 
         // Run the Servos
         RunServos();
+
+        // Run the claws
+        RunClaws();
+
+        // Run the lift
+        RunLift();
     }
 
     // This method controls what happens with the servos for the button pushers for each iteration
@@ -200,7 +206,7 @@ public class TeambotTeleopTank_Iterative extends OpMode{
     // This method controls what happens with the claws
     private void RunClaws() {
 
-        double power = gamepad2.right_stick_y * 0.1;
+        double power = -gamepad2.right_stick_y * 0.1;
 
         if(power >0) {
             robot.claw1Motor.setTargetPosition(CLAW_MAX);
@@ -211,6 +217,8 @@ public class TeambotTeleopTank_Iterative extends OpMode{
             robot.claw2Motor.setTargetPosition(0);
         }
 
+        telemetry.addData("claw power", power);
+        telemetry.addData("claw target", robot.claw1Motor.getTargetPosition());
         robot.claw1Motor.setPower(power);
         robot.claw2Motor.setPower(power);
     }

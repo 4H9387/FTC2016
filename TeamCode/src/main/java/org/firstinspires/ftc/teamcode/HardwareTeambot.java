@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -64,9 +65,9 @@ public class HardwareTeambot
         leftMotor   = hwMap.dcMotor.get("left_drive");
         rightMotor  = hwMap.dcMotor.get("right_drive");
         lift1Motor = hwMap.dcMotor.get("lift1");
-//        lift2Motor  = hwMap.dcMotor.get("lift2");
-//        claw1Motor   = hwMap.dcMotor.get("claw1");
-//        claw2Motor  = hwMap.dcMotor.get("claw2");
+        //lift2Motor  = hwMap.dcMotor.get("lift2");
+        claw1Motor   = hwMap.dcMotor.get("claw1");
+        claw2Motor  = hwMap.dcMotor.get("claw2");
 
         leftArm = hwMap.servo.get("left_arm");
 
@@ -105,8 +106,8 @@ public class HardwareTeambot
 //        lift2Motor.setPower(0);
 
         // Initialize Claw Motors
-        claw1Motor.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
-        claw2Motor.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
+        claw1Motor.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
+        claw2Motor.setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors
         claw1Motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         claw2Motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         claw1Motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
