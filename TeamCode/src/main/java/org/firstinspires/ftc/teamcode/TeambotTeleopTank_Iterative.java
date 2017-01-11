@@ -64,7 +64,7 @@ public class TeambotTeleopTank_Iterative extends OpMode{
     double leftPower            = 0;
     double rightPower           = 0;
     final double ARM_SPEED      = 0.02;
-    final double ACCELERATION   = 0.03;
+    final double ACCELERATION   = 0.04;
 
 
     /*
@@ -107,6 +107,7 @@ public class TeambotTeleopTank_Iterative extends OpMode{
         RunServos();
     }
 
+    // This method controls what happens with the servos for the button pushers for each iteration
     private void RunServos() {
         if (gamepad2.left_bumper)
             leftArmPosition += ARM_SPEED;
@@ -128,6 +129,7 @@ public class TeambotTeleopTank_Iterative extends OpMode{
         robot.rightArm.setPosition(rightArmPosisiton);
     }
 
+    // This method controls the acceleration of the robot.
     private double Accelerate(double value, double target, double rate)
     {
         double newValue=value;
@@ -148,11 +150,14 @@ public class TeambotTeleopTank_Iterative extends OpMode{
 
         return Range.clip(newValue, -1.0, 1.0);
     }
+
+    // This method controls what happens with the drive wheels for each iteration
     private void RunWheels() {
         double accel = ACCELERATION;
         double leftTarget = -gamepad1.left_stick_y;
         double rightTarget = -gamepad1.right_stick_y;
 
+        // If one of the gamepad 1 bumpers is pushed, run at half speed
         if(gamepad1.left_bumper || gamepad1.right_bumper)
         {
             leftTarget *= 0.5;
@@ -160,9 +165,11 @@ public class TeambotTeleopTank_Iterative extends OpMode{
             accel *= 0.5;
         }
 
+        // Move the power at a slower rate to increase robot control
         leftPower = Accelerate(leftPower,leftTarget, accel);
         rightPower = Accelerate(rightPower,rightTarget, accel);
 
+        // If a touch sensor is pushed, stop the wheels on that side
         if(robot.leftTouchSensor.isPressed() && gamepad1.left_stick_y < 0)
             leftPower=0;
         if(robot.rightTouchSensor.isPressed() && gamepad1.right_stick_y < 0)
@@ -174,34 +181,6 @@ public class TeambotTeleopTank_Iterative extends OpMode{
         robot.rightMotor.setPower(rightPower);
     }
 
-
-    private void RunWheelsCar() {
-
-        double forwardPower = -gamepad1.left_stick_y;
-        double steerPower = gamepad1.right_stick_x;
-
-
-        if(gamepad1.left_bumper || gamepad1.right_bumper)
-        {
-            forwardPower *= 0.5;
-            steerPower *= 0.5;
-        }
-
-        leftPower = forwardPower + steerPower;
-        rightPower = forwardPower - steerPower;
-
-        leftPower = Range.clip(leftPower,-1.0,1.0);
-        rightPower = Range.clip(rightPower,-1.0,1.0);
-        if(robot.leftTouchSensor.isPressed() && gamepad1.left_stick_y < 0)
-            leftPower=0;
-        if(robot.rightTouchSensor.isPressed() && gamepad1.right_stick_y < 0)
-            rightPower=0;
-
-        telemetry.addData("left", leftPower);
-        telemetry.addData("right", rightPower);
-        robot.leftMotor.setPower(leftPower);
-        robot.rightMotor.setPower(rightPower);
-    }
 
     /*
      * Code to run ONCE after the driver hits STOP
