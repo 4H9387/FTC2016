@@ -181,7 +181,11 @@ public class TeambotTeleopTank_Iterative extends OpMode{
         robot.rightMotor.setPower(rightPower);
     }
 
+    private void RunLift() {
+        double power = gamepad1.left_stick_y;
 
+        robot.lift1Motor.setPower(power);
+    }
     /*
      * Code to run ONCE after the driver hits STOP
      */
@@ -190,5 +194,4 @@ public class TeambotTeleopTank_Iterative extends OpMode{
         robot.leftColorSensor.enableLed(false);
         robot.rightColorSensor.enableLed(false);
     }
-
 }
