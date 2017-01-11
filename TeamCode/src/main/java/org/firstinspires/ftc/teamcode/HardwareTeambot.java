@@ -98,20 +98,23 @@ public class HardwareTeambot
 //        lift2Motor.setDirection(DcMotor.Direction.REVERSE);
         lift1Motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 //        lift2Motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        lift1Motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        lift1Motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        lift1Motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 //        lift2Motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         lift1Motor.setPower(0);
 //        lift2Motor.setPower(0);
 
         // Initialize Claw Motors
-//        claw1Motor.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
-//        claw2Motor.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
-//        claw1Motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        claw2Motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        claw1Motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        claw2Motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        claw1Motor.setPower(0);
-//        claw2Motor.setPower(0);
+        claw1Motor.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
+        claw2Motor.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
+        claw1Motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        claw2Motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        claw1Motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        claw2Motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        claw1Motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        claw2Motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        claw1Motor.setPower(0);
+        claw2Motor.setPower(0);
 
         // Gyro
         gyro = (ModernRoboticsI2cGyro)hwMap.gyroSensor.get("gyro");

@@ -59,12 +59,16 @@ public class TeambotTeleopTank_Iterative extends OpMode{
     /* Declare OpMode members. */
     HardwareTeambot robot       = new HardwareTeambot(); // use the class created to define a Pushbot's hardware
                                                          // could also use HardwarePushbotMatrix class.
-    double leftArmPosition      = robot.ARM_MIN_RANGE;
-    double rightArmPosisiton    = robot.ARM_MAX_RANGE;
-    double leftPower            = 0;
-    double rightPower           = 0;
-    final double ARM_SPEED      = 0.02;
-    final double ACCELERATION   = 0.04;
+    double      leftArmPosition      = robot.ARM_MIN_RANGE;
+    double      rightArmPosisiton    = robot.ARM_MAX_RANGE;
+    double      leftPower            = 0;
+    double      rightPower           = 0;
+    double      ARM_SPEED            = 0.02;
+    double      ACCELERATION         = 0.04;
+    double      LIFT_GEAR_REDUCTION  = 10.0;
+    int         COUNTS_PER_MOTOR_REV = 1440 ;    // eg: TETRIX Motor Encoder
+    int         LIFT_MAX             = (int) ( COUNTS_PER_MOTOR_REV * 2 *  LIFT_GEAR_REDUCTION);
+    int         CLAW_MAX             = (int) (COUNTS_PER_MOTOR_REV * 0.5);
 
 
     /*
@@ -181,11 +185,37 @@ public class TeambotTeleopTank_Iterative extends OpMode{
         robot.rightMotor.setPower(rightPower);
     }
 
+    // This method controls what happens with the Lift
     private void RunLift() {
-        double power = gamepad1.left_stick_y;
+        double power = gamepad2.left_stick_y;
+
+        if(power >0)
+            robot.lift1Motor.setTargetPosition(LIFT_MAX);
+        else
+            robot.lift1Motor.setTargetPosition(0);
 
         robot.lift1Motor.setPower(power);
     }
+
+    // This method controls what happens with the claws
+    private void RunClaws() {
+
+        double power = gamepad2.right_stick_y * 0.1;
+
+        if(power >0) {
+            robot.claw1Motor.setTargetPosition(CLAW_MAX);
+            robot.claw2Motor.setTargetPosition(CLAW_MAX);
+        }
+        else{
+            robot.claw1Motor.setTargetPosition(0);
+            robot.claw2Motor.setTargetPosition(0);
+        }
+
+        robot.claw1Motor.setPower(power);
+        robot.claw2Motor.setPower(power);
+    }
+
+
     /*
      * Code to run ONCE after the driver hits STOP
      */
