@@ -37,6 +37,7 @@ import android.view.View;
 
 import com.qualcomm.ftcrobotcontroller.R;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 
@@ -53,8 +54,8 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
-@Autonomous(name = "Sensor: MR Color-off Right", group = "Sensor")
-//@Disabled
+@Autonomous(name = "Sensor: MR Color-off Left", group = "Sensor")
+@Disabled
 public class SensorMRColorLightOff extends LinearOpMode {
 
     ColorSensor colorSensor;    // Hardware Device Object
@@ -81,7 +82,7 @@ public class SensorMRColorLightOff extends LinearOpMode {
         boolean bLedOn = false;
 
         // get a reference to our ColorSensor object.
-        colorSensor = hardwareMap.colorSensor.get("right_color");
+        colorSensor = hardwareMap.colorSensor.get("left_color");
 
         // Set the LED in the beginning
         colorSensor.enableLed(true);

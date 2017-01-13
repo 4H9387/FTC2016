@@ -70,6 +70,8 @@ public class TeambotTeleopTank_Iterative extends OpMode{
     int         LIFT_MAX             = (int) ( COUNTS_PER_MOTOR_REV * 2 *  LIFT_GEAR_REDUCTION);
     int         CLAW_MAX             = (int) (COUNTS_PER_MOTOR_REV * 0.5);
 
+    boolean isLatchOpen = false;
+
 
     /*
      * Code to run ONCE when the driver hits INIT
@@ -110,11 +112,17 @@ public class TeambotTeleopTank_Iterative extends OpMode{
         // Run the Servos
         RunServos();
 
+        // Run the Latch
+        RunLatch();
+
+        // Only run the lift and claws if the latch is open
+        if(isLatchOpen) {
         // Run the claws
         RunClaws();
 
         // Run the lift
         RunLift();
+        }
     }
 
     // This method controls what happens with the servos for the button pushers for each iteration
@@ -191,6 +199,22 @@ public class TeambotTeleopTank_Iterative extends OpMode{
         robot.rightMotor.setPower(rightPower);
     }
 
+    // This method controls what happens with the latch
+    private void RunLatch() {
+
+        // we can only open the latch
+        if(isLatchOpen)
+            return;
+
+        if(gamepad1.y)
+        {
+            robot.liftLatch.setPosition(robot.LATCH_OPEN);
+        }
+
+        if(robot.liftLatch.getPosition() == robot.LATCH_OPEN)
+            isLatchOpen=true;
+    }
+
     // This method controls what happens with the Lift
     private void RunLift() {
         double power = gamepad2.left_stick_y;
@@ -206,18 +230,32 @@ public class TeambotTeleopTank_Iterative extends OpMode{
     // This method controls what happens with the claws
     private void RunClaws() {
 
-        double power = -gamepad2.right_stick_y * 0.1;
+        double stick = -gamepad2.right_stick_y * 0.1;
+        double power = 1;
+        int currentPosition = robot.claw1Motor.getCurrentPosition();
 
-        if(power >0) {
+        if(stick >0) {
             robot.claw1Motor.setTargetPosition(CLAW_MAX);
             robot.claw2Motor.setTargetPosition(CLAW_MAX);
+            power = 1;
         }
-        else{
+        else if(stick <0){
             robot.claw1Motor.setTargetPosition(0);
             robot.claw2Motor.setTargetPosition(0);
+            power = -1;
+        }
+        else
+        {
+            robot.claw1Motor.setTargetPosition(currentPosition);
+            robot.claw2Motor.setTargetPosition(currentPosition);
+            power = 1;
         }
 
+        if(stick ==0 && currentPosition<10)
+            power = 0;
+
         telemetry.addData("claw power", power);
+        telemetry.addData("claw position", currentPosition);
         telemetry.addData("claw target", robot.claw1Motor.getTargetPosition());
         robot.claw1Motor.setPower(power);
         robot.claw2Motor.setPower(power);
