@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+
 /**
  * This is NOT an opmode.
  *
@@ -129,10 +130,12 @@ public class HardwareTeambot
         claw1Motor.setPower(1);
         claw2Motor.setPower(1);
 
+        // Initialize Servos
         leftArm.setPosition(ARM_MIN_RANGE);
         rightArm.setPosition(ARM_MAX_RANGE);
         liftLatch.setPosition(LATCH_CLOSED);
 
+        // Initialize Sensors
         leftColorSensor.enableLed(true);
         rightColorSensor.enableLed(true);
         lightSensor.enableLed(true);

@@ -1,14 +1,11 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cColorSensor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-/**
- * Created by Vincent on 12/9/2016.
- */
 
 public abstract class TeambotLinearOpModeBase extends LinearOpMode {
     // Hardware definintion
@@ -37,6 +34,7 @@ public abstract class TeambotLinearOpModeBase extends LinearOpMode {
         CalibrateGyro();
         waitForStart();
     }
+
 
     private void CalibrateGyro() {
         // Initialize Gyro
@@ -325,8 +323,8 @@ public abstract class TeambotLinearOpModeBase extends LinearOpMode {
     }
 
 
-    public int COLOR_LOW = 15;
-    public int COLOR_HIGH = 100;
+    public int COLOR_LOW = 1;
+    public int COLOR_HIGH = 2;
 
     protected void PushBeaconButton(Color color) {
         if(getLeftColor() == color)
@@ -369,17 +367,17 @@ public abstract class TeambotLinearOpModeBase extends LinearOpMode {
         Unknown
     }
 
-    private Color GetSensorColor(ColorSensor sensor)
+    private Color GetSensorColor(ModernRoboticsI2cColorSensor sensor)
     {
         int red = sensor.red();
         int blue = sensor.blue();
         int green = sensor.green();
 
-        if(red<COLOR_LOW && green<COLOR_LOW && blue>COLOR_HIGH)
+        if(red<=COLOR_LOW && green<=COLOR_LOW && blue>=COLOR_HIGH)
             return Color.Blue;
-        if(red<COLOR_LOW && green>COLOR_HIGH && blue<COLOR_LOW)
+        if(red<=COLOR_LOW && green>=COLOR_HIGH && blue<=COLOR_LOW)
             return Color.Green;
-        if(red>COLOR_HIGH && green<COLOR_LOW && blue<COLOR_LOW)
+        if(red>=COLOR_HIGH && green<=COLOR_LOW && blue<=COLOR_LOW)
             return Color.Red;
 
         return Color.Unknown;
@@ -395,7 +393,7 @@ public abstract class TeambotLinearOpModeBase extends LinearOpMode {
         return GetSensorColor(robot.rightColorSensor);
     }
 
-    static final double     WHITE_THRESHOLD = 0.2;
+    static final double     WHITE_THRESHOLD = 0.5;
     public boolean driveToLine(double speed, double maxDistance)
     {
         boolean lineFound=false;
