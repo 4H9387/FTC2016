@@ -88,14 +88,27 @@ public abstract class TeambotLinearOpModeBase extends LinearOpMode {
                     (robot.leftMotor.isBusy() || robot.rightMotor.isBusy())) {
 
                 // Stop motor if touch sensor is pushed.
-                if(robot.leftTouchSensor.isPressed())
-                {
-                    robot.leftMotor.setPower(0);
-                }
-                if(robot.rightTouchSensor.isPressed())
-                {
-                    robot.rightMotor.setPower(0);
-                }
+//                if(robot.leftTouchSensor.isPressed())
+//                {
+//                    robot.leftMotor.setPower(0);
+//                }
+//                if(robot.rightTouchSensor.isPressed())
+//                {
+//                    robot.rightMotor.setPower(0);
+//                }
+//
+//                if(robot.leftMotor.getPower()==0 && robot.rightMotor.getPower()==0)
+//                {
+//                    // Stop all motion;
+//                    robot.leftMotor.setPower(0);
+//                    robot.rightMotor.setPower(0);
+//
+//                    // Turn off RUN_TO_POSITION
+//                    robot.leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//                    robot.rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//                    return;
+//                }
+
                 // Display it for the driver.
                 telemetry.addData("Path1", "Running to %7d :%7d", newLeftTarget, newRightTarget);
                 telemetry.addData("Path2", "Running at %7d :%7d",
@@ -325,16 +338,21 @@ public abstract class TeambotLinearOpModeBase extends LinearOpMode {
     }
 
 
-    public int COLOR_LOW = 0;
-    public int COLOR_HIGH = 1;
+    public int COLOR_LOW = 1;
+    public int COLOR_HIGH = 2;
 
     protected  boolean PushBeaconButton(Color color) {
         Color leftColor = getLeftColor();
         Color rightColor = getRightColor();
 
-        encoderDrive(DRIVE_SPEED/2, -1,-1);
+        telemetry.addData("Left Color", leftColor);
+        telemetry.addData("Right Color", rightColor);
+        telemetry.update();
 
-        if(leftColor == color || leftColor == Color.Unknown && rightColor != Color.Unknown && rightColor != color) {
+        encoderDrive(DRIVE_SPEED/2, -2,-2);
+        sleep(100);
+
+        if(leftColor == color){// || leftColor == Color.Unknown && rightColor != Color.Unknown && rightColor != color) {
 
             robot.leftArm.setPosition(robot.ARM_MAX_RANGE);
             while(robot.leftArm.getPosition() < robot.ARM_MAX_RANGE) {
@@ -342,19 +360,24 @@ public abstract class TeambotLinearOpModeBase extends LinearOpMode {
             }
 
         }
-        else  if(rightColor == color || rightColor == Color.Unknown && leftColor != Color.Unknown && leftColor != color) {
+        else  if(rightColor == color){// || rightColor == Color.Unknown && leftColor != Color.Unknown && leftColor != color) {
             robot.rightArm.setPosition(robot.ARM_MIN_RANGE);
             while(robot.leftArm.getPosition() > robot.ARM_MIN_RANGE) {
                 sleep(50);
             }
         }
 
-        encoderDrive(DRIVE_SPEED/2, 1.5, 1.5);
+        encoderDrive(DRIVE_SPEED/2, 2, 2);
 
+        sleep(1000);
         robot.leftArm.setPosition(robot.ARM_MIN_RANGE);
         robot.rightArm.setPosition(robot.ARM_MAX_RANGE);
 
         sleep(1000);
+
+        telemetry.addData("Left Color", leftColor);
+        telemetry.addData("Right Color", rightColor);
+        telemetry.update();
 
         return(getLeftColor() == color && getRightColor() == color);
     }
@@ -416,7 +439,7 @@ public abstract class TeambotLinearOpModeBase extends LinearOpMode {
 
             // keep looping while we are still active, and there is time left, and both motors are running.
             while (opModeIsActive() &&
-                    (robot.leftMotor.isBusy() || robot.rightMotor.isBusy())) {
+                    (robot.leftMotor.isBusy() || robot.rightMotor.isBusy()) && !lineFound) {
 
                 // Stop motor if touch sensor is pushed.
                 if(robot.leftTouchSensor.isPressed())
@@ -432,6 +455,7 @@ public abstract class TeambotLinearOpModeBase extends LinearOpMode {
                     robot.leftMotor.setPower(0);
                     robot.rightMotor.setPower(0);
                     lineFound = true;
+                    break;
                 }
                 // Display it for the driver.
                 telemetry.addData("Path1", "Running to %7d :%7d", newLeftTarget, newRightTarget);
