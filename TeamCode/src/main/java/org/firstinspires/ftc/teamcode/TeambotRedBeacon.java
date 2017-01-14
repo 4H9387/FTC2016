@@ -5,8 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 @Autonomous(name="Push RED Beacon", group="a_Teambot")
 public class TeambotRedBeacon extends TeambotLinearOpModeBase {
 
-    static final double     DRIVE_SPEED             = 0.7; // 0.7    // Nominal speed for better accuracy.
-    static final double     TURN_SPEED             = 0.5; // 0.7    // Nominal speed for better accuracy.
+    static final int     DRIVE_SPEED             = 1440;
+    static final double     TURN_SPEED             = 0.5;
 
     @Override
     public void runOpMode() {
@@ -15,12 +15,34 @@ public class TeambotRedBeacon extends TeambotLinearOpModeBase {
 
         encoderDrive(DRIVE_SPEED,6.0,6.0);
         gyroTurn(TURN_SPEED,45.0);
+
         driveToLine(DRIVE_SPEED, 70.0);
+        encoderDrive(DRIVE_SPEED,2.0,2.0);
+
+        sleep(100);
         gyroTurn(TURN_SPEED, 90);
 
-        success=PushBeaconButton(Color.Red);
+        encoderDrive(DRIVE_SPEED,7,7);
+
+        sleep(100);
+        success = PushBeaconButton(Color.Blue);
         if(!success)
-            PushBeaconButton(Color.Red);
+            PushBeaconButton(Color.Blue);
+
+        // Push second beacon
+        encoderDrive(DRIVE_SPEED, -7,-7);
+        gyroTurn(TURN_SPEED, 0);
+        driveToLine(DRIVE_SPEED,50.0);
+        encoderDrive(DRIVE_SPEED,2.0,2.0);
+
+        gyroTurn(TURN_SPEED, 90);
+
+        encoderDrive(DRIVE_SPEED,8,8);
+
+        sleep(100);
+        success = PushBeaconButton(Color.Blue);
+        if(!success)
+            PushBeaconButton(Color.Blue);
     }
 
 }
