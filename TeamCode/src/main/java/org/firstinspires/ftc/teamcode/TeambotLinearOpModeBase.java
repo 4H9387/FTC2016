@@ -19,7 +19,7 @@ public abstract class TeambotLinearOpModeBase extends LinearOpMode {
     public double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * 3.1415);
 
-    public double DRIVE_SPEED = 0.7;
+    public int DRIVE_SPEED = 1440;
 
     // Used for gyro
     static final double     HEADING_THRESHOLD       = 1 ;      // As tight as we can make it with an integer gyro
@@ -58,7 +58,7 @@ public abstract class TeambotLinearOpModeBase extends LinearOpMode {
         robot.gyro.resetZAxisIntegrator();
     }
 
-    public void encoderDrive(double speed,
+    public void encoderDrive(int speed,
                              double leftInches,
                              double rightInches)
     {
@@ -80,34 +80,26 @@ public abstract class TeambotLinearOpModeBase extends LinearOpMode {
 
             // reset the timeout time and start motion.
             runtime.reset();
-            robot.leftMotor.setPower(Math.abs(speed));
-            robot.rightMotor.setPower(Math.abs(speed));
+            robot.leftMotor.setMaxSpeed(speed);
+            robot.rightMotor.setMaxSpeed(speed);
+
+            robot.leftMotor.setPower(1.0);
+            robot.rightMotor.setPower(1.0);
 
             // keep looping while we are still active, and there is time left, and both motors are running.
             while (opModeIsActive() &&
                     (robot.leftMotor.isBusy() || robot.rightMotor.isBusy())) {
 
                 // Stop motor if touch sensor is pushed.
-//                if(robot.leftTouchSensor.isPressed())
-//                {
-//                    robot.leftMotor.setPower(0);
-//                }
-//                if(robot.rightTouchSensor.isPressed())
-//                {
-//                    robot.rightMotor.setPower(0);
-//                }
-//
-//                if(robot.leftMotor.getPower()==0 && robot.rightMotor.getPower()==0)
-//                {
-//                    // Stop all motion;
-//                    robot.leftMotor.setPower(0);
-//                    robot.rightMotor.setPower(0);
-//
-//                    // Turn off RUN_TO_POSITION
-//                    robot.leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//                    robot.rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//                    return;
-//                }
+                if(robot.leftTouchSensor.isPressed() && leftInches >0 )
+                {
+                    robot.leftMotor.setTargetPosition(robot.leftMotor.getCurrentPosition());
+                }
+                if(robot.rightTouchSensor.isPressed() && rightInches > 0)
+                {
+                    robot.rightMotor.setTargetPosition(robot.rightMotor.getCurrentPosition());
+                }
+
 
                 // Display it for the driver.
                 telemetry.addData("Path1", "Running to %7d :%7d", newLeftTarget, newRightTarget);
@@ -368,12 +360,14 @@ public abstract class TeambotLinearOpModeBase extends LinearOpMode {
         }
 
         encoderDrive(DRIVE_SPEED/2, 2, 2);
+        encoderDrive(DRIVE_SPEED/2, -1, -1);
 
-        sleep(1000);
+        sleep(500);
         robot.leftArm.setPosition(robot.ARM_MIN_RANGE);
         robot.rightArm.setPosition(robot.ARM_MAX_RANGE);
 
-        sleep(1000);
+        sleep(500);
+        encoderDrive(DRIVE_SPEED/2, 2, 2);
 
         telemetry.addData("Left Color", leftColor);
         telemetry.addData("Right Color", rightColor);
@@ -413,7 +407,7 @@ public abstract class TeambotLinearOpModeBase extends LinearOpMode {
     }
 
     static final double     WHITE_THRESHOLD = 0.5;
-    public boolean driveToLine(double speed, double maxDistance)
+    public boolean driveToLine(int speed, double maxDistance)
     {
         boolean lineFound=false;
         int newLeftTarget;
@@ -434,21 +428,24 @@ public abstract class TeambotLinearOpModeBase extends LinearOpMode {
 
             // reset the timeout time and start motion.
             runtime.reset();
-            robot.leftMotor.setPower(Math.abs(speed));
-            robot.rightMotor.setPower(Math.abs(speed));
+            robot.leftMotor.setMaxSpeed(speed);
+            robot.rightMotor.setMaxSpeed(speed);
+
+            robot.leftMotor.setPower(1.0);
+            robot.rightMotor.setPower(1.0);
 
             // keep looping while we are still active, and there is time left, and both motors are running.
             while (opModeIsActive() &&
                     (robot.leftMotor.isBusy() || robot.rightMotor.isBusy()) && !lineFound) {
 
                 // Stop motor if touch sensor is pushed.
-                if(robot.leftTouchSensor.isPressed())
+                if(robot.leftTouchSensor.isPressed() && maxDistance >0 )
                 {
-                    robot.leftMotor.setPower(0);
+                    robot.leftMotor.setTargetPosition(robot.leftMotor.getCurrentPosition());
                 }
-                if(robot.rightTouchSensor.isPressed())
+                if(robot.rightTouchSensor.isPressed() && maxDistance > 0)
                 {
-                    robot.rightMotor.setPower(0);
+                    robot.rightMotor.setTargetPosition(robot.rightMotor.getCurrentPosition());
                 }
                 if(robot.lightSensor.getLightDetected()>WHITE_THRESHOLD)
                 {
