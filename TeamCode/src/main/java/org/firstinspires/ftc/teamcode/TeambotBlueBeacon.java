@@ -10,7 +10,7 @@ public class TeambotBlueBeacon extends TeambotLinearOpModeBase {
 
     @Override
     public void runOpMode() {
-
+        boolean success;
         InitializeRobot();
 
         encoderDrive(DRIVE_SPEED,6.0,6.0);
@@ -18,7 +18,9 @@ public class TeambotBlueBeacon extends TeambotLinearOpModeBase {
         driveToLine(DRIVE_SPEED, 70.0);
         gyroTurn(TURN_SPEED, 90);
 
-        PushBeaconButton(Color.Blue);
+        success=PushBeaconButton(Color.Blue);
+        if(!success)
+            PushBeaconButton(Color.Blue);
     }
 
 }

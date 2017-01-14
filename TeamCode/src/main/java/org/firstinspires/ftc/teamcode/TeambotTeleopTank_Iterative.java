@@ -21,7 +21,7 @@ public class TeambotTeleopTank_Iterative extends OpMode{
     double      ACCELERATION         = 0.04;
     double      LIFT_GEAR_REDUCTION  = 10.0;
     int         COUNTS_PER_MOTOR_REV = 1440 ;    // eg: TETRIX Motor Encoder
-    int         LIFT_MAX             = (int) ( COUNTS_PER_MOTOR_REV * 2 *  LIFT_GEAR_REDUCTION);
+    int         LIFT_MAX             = (int) ( COUNTS_PER_MOTOR_REV * 10 *  LIFT_GEAR_REDUCTION);
     int         CLAW_MAX             = (int) (COUNTS_PER_MOTOR_REV * 0.5);
 
     boolean isLatchOpen = false;
@@ -39,6 +39,8 @@ public class TeambotTeleopTank_Iterative extends OpMode{
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Say", "Hello Driver");    //
+        robot.leftColorSensor.enableLed(true);
+        robot.rightColorSensor.enableLed(true);
     }
 
     /*
@@ -70,13 +72,13 @@ public class TeambotTeleopTank_Iterative extends OpMode{
         RunLatch();
 
         // Only run the lift and claws if the latch is open
-        if(isLatchOpen) {
+        //if(isLatchOpen) {
             // Run the claws
             RunClaws();
 
             // Run the lift
             RunLift();
-        }
+        //}
     }
 
     // This method controls what happens with the servos for the button pushers for each iteration
@@ -174,7 +176,7 @@ public class TeambotTeleopTank_Iterative extends OpMode{
         double power = gamepad2.left_stick_y;
 
         if(power >0)
-            robot.lift1Motor.setTargetPosition(LIFT_MAX);
+            robot.lift1Motor.setTargetPosition(-LIFT_MAX);
         else
             robot.lift1Motor.setTargetPosition(0);
 

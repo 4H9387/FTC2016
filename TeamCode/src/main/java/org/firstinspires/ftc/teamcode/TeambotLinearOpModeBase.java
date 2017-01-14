@@ -19,6 +19,8 @@ public abstract class TeambotLinearOpModeBase extends LinearOpMode {
     public double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * 3.1415);
 
+    public double DRIVE_SPEED = 0.7;
+
     // Used for gyro
     static final double     HEADING_THRESHOLD       = 1 ;      // As tight as we can make it with an integer gyro
     static final double     P_TURN_COEFF            = 0.04; //0.1    // Larger is more responsive, but also less stable
@@ -323,47 +325,44 @@ public abstract class TeambotLinearOpModeBase extends LinearOpMode {
     }
 
 
-    public int COLOR_LOW = 1;
-    public int COLOR_HIGH = 2;
+    public int COLOR_LOW = 0;
+    public int COLOR_HIGH = 1;
 
-    protected void PushBeaconButton(Color color) {
-        if(getLeftColor() == color)
-        {
+    protected  boolean PushBeaconButton(Color color) {
+        Color leftColor = getLeftColor();
+        Color rightColor = getRightColor();
+
+        encoderDrive(DRIVE_SPEED/2, -1,-1);
+
+        if(leftColor == color || leftColor == Color.Unknown && rightColor != Color.Unknown && rightColor != color) {
+
             robot.leftArm.setPosition(robot.ARM_MAX_RANGE);
             while(robot.leftArm.getPosition() < robot.ARM_MAX_RANGE) {
                 sleep(50);
             }
 
-            sleep(1000);
-
-            if(getRightColor() != color)
-            {
-                encoderDrive(TeambotBlueBeacon.DRIVE_SPEED/2, -1,-1);
-                encoderDrive(TeambotBlueBeacon.DRIVE_SPEED/2, 1.5, 1.5);
-            }
         }
-        else if(getRightColor() == color)
-        {
+        else  if(rightColor == color || rightColor == Color.Unknown && leftColor != Color.Unknown && leftColor != color) {
             robot.rightArm.setPosition(robot.ARM_MIN_RANGE);
             while(robot.leftArm.getPosition() > robot.ARM_MIN_RANGE) {
                 sleep(50);
             }
-
-            sleep(1000);
-
-            if(getLeftColor() != color)
-            {
-                encoderDrive(TeambotBlueBeacon.DRIVE_SPEED/2, -1,-1);
-                encoderDrive(TeambotBlueBeacon.DRIVE_SPEED/2, 1.5, 1.5);
-            }
         }
+
+        encoderDrive(DRIVE_SPEED/2, 1.5, 1.5);
+
+        robot.leftArm.setPosition(robot.ARM_MIN_RANGE);
+        robot.rightArm.setPosition(robot.ARM_MAX_RANGE);
+
+        sleep(1000);
+
+        return(getLeftColor() == color && getRightColor() == color);
     }
 
     public enum Color
     {
         Red,
         Blue,
-        Green,
         Unknown
     }
 
@@ -371,13 +370,10 @@ public abstract class TeambotLinearOpModeBase extends LinearOpMode {
     {
         int red = sensor.red();
         int blue = sensor.blue();
-        int green = sensor.green();
 
-        if(red<=COLOR_LOW && green<=COLOR_LOW && blue>=COLOR_HIGH)
-            return Color.Blue;
-        if(red<=COLOR_LOW && green>=COLOR_HIGH && blue<=COLOR_LOW)
-            return Color.Green;
-        if(red>=COLOR_HIGH && green<=COLOR_LOW && blue<=COLOR_LOW)
+        if(red<=COLOR_LOW && blue>=COLOR_HIGH)
+            return Color.Blue;;
+        if(red>=COLOR_HIGH && blue<=COLOR_LOW)
             return Color.Red;
 
         return Color.Unknown;

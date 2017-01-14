@@ -107,7 +107,7 @@ public class HardwareTeambot
         rightMotor.setPower(0);
 
         // Initialize Lift Motors
-        lift1Motor.setDirection(DcMotor.Direction.REVERSE);
+        lift1Motor.setDirection(DcMotor.Direction.FORWARD);
         lift1Motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         lift1Motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         lift1Motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
@@ -136,9 +136,11 @@ public class HardwareTeambot
         liftLatch.setPosition(LATCH_CLOSED);
 
         // Initialize Sensors
-        leftColorSensor.enableLed(true);
-        rightColorSensor.enableLed(true);
+        leftColorSensor.enableLed(false);
+        rightColorSensor.enableLed(false);
         lightSensor.enableLed(true);
+
+        waitForTick(50);
     }
 
     /***
