@@ -19,7 +19,7 @@ public abstract class TeambotLinearOpModeBase extends LinearOpMode {
     public double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * 3.1415);
 
-    public int DRIVE_SPEED = 1440;
+    public int DRIVE_SPEED = 1600;
 
     // Used for gyro
     static final double     HEADING_THRESHOLD       = 1 ;      // As tight as we can make it with an integer gyro
@@ -341,7 +341,7 @@ public abstract class TeambotLinearOpModeBase extends LinearOpMode {
         telemetry.addData("Right Color", rightColor);
         telemetry.update();
 
-        encoderDrive(DRIVE_SPEED/2, -2,-2);
+        encoderDrive(DRIVE_SPEED, -2,-2);
         sleep(100);
 
         if(leftColor == color){// || leftColor == Color.Unknown && rightColor != Color.Unknown && rightColor != color) {
@@ -359,15 +359,15 @@ public abstract class TeambotLinearOpModeBase extends LinearOpMode {
             }
         }
 
-        encoderDrive(DRIVE_SPEED/2, 2, 2);
-        encoderDrive(DRIVE_SPEED/2, -1, -1);
+        encoderDrive(DRIVE_SPEED, 2, 2);
+        encoderDrive(DRIVE_SPEED, -1, -1);
 
-        sleep(500);
+        sleep(300);
         robot.leftArm.setPosition(robot.ARM_MIN_RANGE);
         robot.rightArm.setPosition(robot.ARM_MAX_RANGE);
 
-        sleep(500);
-        encoderDrive(DRIVE_SPEED/2, 2, 2);
+        sleep(300);
+        encoderDrive(DRIVE_SPEED, 2, 2);
 
         telemetry.addData("Left Color", leftColor);
         telemetry.addData("Right Color", rightColor);
@@ -388,9 +388,9 @@ public abstract class TeambotLinearOpModeBase extends LinearOpMode {
         int red = sensor.red();
         int blue = sensor.blue();
 
-        if(red<=COLOR_LOW && blue>=COLOR_HIGH)
+        if(blue>red && blue>=COLOR_HIGH)
             return Color.Blue;;
-        if(red>=COLOR_HIGH && blue<=COLOR_LOW)
+        if(red>=COLOR_HIGH && red>COLOR_HIGH)
             return Color.Red;
 
         return Color.Unknown;

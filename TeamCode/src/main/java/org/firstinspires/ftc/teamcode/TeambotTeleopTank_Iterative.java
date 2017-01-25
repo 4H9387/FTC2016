@@ -72,13 +72,13 @@ public class TeambotTeleopTank_Iterative extends OpMode{
         RunLatch();
 
         // Only run the lift and claws if the latch is open
-        //if(isLatchOpen) {
+        if(isLatchOpen) {
             // Run the claws
             RunClaws();
 
             // Run the lift
-            RunLift();
-        //}
+            //RunLift();
+        }
     }
 
     // This method controls what happens with the servos for the button pushers for each iteration
